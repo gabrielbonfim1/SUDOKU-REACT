@@ -2,12 +2,15 @@ import React from 'react'
 
 
 const Cell = (props) => {
-    const {i,j,value,wrong} = props
+    const {i,j,defaultValue,value,wrong} = props
     
     function setClass(){
         let className = 'Cell '
         if (wrong === 1) {
-            className += 'wrong'
+            className += 'wrong '
+        }
+        if (['1','2','3','4','5','6','7','8','9'].includes(defaultValue)){
+            className += 'default'
         }
         return className
     }

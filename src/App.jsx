@@ -1,7 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import Cell from './components/Cell'
-import { initalGridValues, initalWrongValues } from './initials/initial'
+import initalGridValues from './initials/puzzles'
+import _ from 'lodash'
+
 
 // Function to check wrong filled squares on the Grid
 function check(grid,setWrong){
@@ -35,9 +37,10 @@ function check(grid,setWrong){
 
 
 const App = () => {
-    
-    const [grid, setGrid] = useState(initalGridValues)
-    const [wrong,setWrong] = useState(Array(9).fill(null).map(() => Array(9).fill(0)))
+    console.log(initalGridValues[1])
+    const [defaultValues, setDefaultValues] = useState(_.cloneDeep(initalGridValues[0]))
+    const [grid, setGrid] = useState(_.cloneDeep(initalGridValues[0]))
+    const [wrong,setWrong] = useState(_.cloneDeep(Array(9).fill(Array(9).fill(0))))
     
     //Keyboard listener to set numbers on Grid
     useEffect(()=>{
@@ -60,13 +63,13 @@ const App = () => {
         check(grid,setWrong)       
 
         return (()=>{
-            let newWrong = [...initalWrongValues]
+            let newWrong = _.cloneDeep(Array(9).fill(Array(9).fill(0)))
             setWrong(newWrong)
         })
     },[grid])
 
     function handleKeyDown(event){
-        
+        if (event.target.classList.contains('default')) return
         //set grid with key the key pressed
         if (['Backspace','0','1','2','3','4','5','6','7','8','9'].includes(event.key)){
             if (event.target.classList[0] === 'Cell'){
@@ -95,13 +98,17 @@ const App = () => {
                         <tr key={i}>
                             {row.map((col,j) => (
                                 <td key={j}>    
-                                    <Cell value={grid[i][j]} wrong={wrong[i][j]} i={i} j={j}/>
+                                    <Cell value={grid[i][j]} wrong={wrong[i][j]} i={i} j={j} defaultValue={defaultValues[i][j]}/>
                                 </td>
                             ))}
                         </tr>
                     ))}
                 </tbody>
             </table>
+            <div className="Line">
+                <button>Solve</button>
+                <button onMouseUp={() => {setGrid(defaultValues)}}>Reset</button>
+            </div>
         </div>
         
     )
