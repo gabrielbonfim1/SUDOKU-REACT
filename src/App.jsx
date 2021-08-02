@@ -33,23 +33,23 @@ function check(grid,setWrong){
 }
 
 
-
-
-
 const App = () => {
-    console.log(initalGridValues[1])
+    
     const [defaultValues, setDefaultValues] = useState(_.cloneDeep(initalGridValues[0]))
     const [grid, setGrid] = useState(_.cloneDeep(initalGridValues[0]))
     const [wrong,setWrong] = useState(_.cloneDeep(Array(9).fill(Array(9).fill(0))))
+       
     
     //Keyboard listener to set numbers on Grid
     useEffect(()=>{
         window.addEventListener('keyup', handleKeyDown)
         return () => {
+            
             window.removeEventListener('keyup', handleKeyDown);
         };
     })
 
+    
     function setCell(i,j){
         return (value) => {
             const newGrid = [...grid]
@@ -83,7 +83,12 @@ const App = () => {
                 }
                 
             }
-        }    
+        }
+           
+    }
+
+    const reset = () => {
+        setGrid(defaultValues)
     }
 
 
@@ -92,22 +97,31 @@ const App = () => {
             <h1>Sudoku Game</h1>
             <h5>By Gabs</h5>
             <hr></hr>
-            <table>
-                <tbody>
-                    {grid.map((row,i) => (
-                        <tr key={i}>
-                            {row.map((col,j) => (
-                                <td key={j}>    
-                                    <Cell value={grid[i][j]} wrong={wrong[i][j]} i={i} j={j} defaultValue={defaultValues[i][j]}/>
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
             <div className="Line">
-                <button>Solve</button>
-                <button onMouseUp={() => {setGrid(defaultValues)}}>Reset</button>
+                <div className="Column">
+                    <table>
+                        <tbody>
+                            {grid.map((row,i) => (
+                                <tr key={i}>
+                                    {row.map((col,j) => (
+                                        <td key={j}>    
+                                            <Cell value={grid[i][j]} wrong={wrong[i][j]} i={i} j={j} defaultValue={defaultValues[i][j]}/>
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <div className="Line">
+                        <button>Solve</button>
+                        <button onMouseUp={reset}>Reset</button>
+                    </div>
+                </div>
+                
+                <div className="Column helpers">
+                    
+                </div>
+
             </div>
         </div>
         
